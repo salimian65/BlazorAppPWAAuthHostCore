@@ -1,0 +1,128 @@
+﻿@page "/"
+@using System.Security.Claims
+@using BlazorAppPWAAuthHostCore.Client.Domain
+@using BlazorAppPWAAuthHostCore.Shared
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject SignOutSessionStateManager SignOutManager
+
+
+<div class="content px-4">
+
+    @if (!_user.Identity.IsAuthenticated)
+    {
+        <h2>If you would like to start chat, you should first login</h2>
+    }
+
+    else
+    {
+        <div class="top-row px-4">
+            <p>You are connected as <b>@_user.Identity.Name</b></p>
+            <button class="btn btn-sm btn-warning ml-md-auto" @onclick="@DisconnectAsync">Disconnect</button>
+        </div>
+
+        <div id="scrollbox">
+
+            @foreach (var item in _messages)
+            {
+                <div class="@item.CSS">
+                    <div class="user">@item.Username</div>
+                    <div class="msg">@item.Body</div>
+                </div>
+            }
+            <hr />
+            <textarea class="input-lg" placeholder="enter your comment" @bind="@_newMessage"></textarea>
+            <button class="btn btn-default" @onclick="@SendAsync">Send</button>
+        </div>
+    }
+
+    @if (_message != null)
+    {
+        <div class="invalid-feedback">@_message</div>
+        <small id="emailHelp" class="form-text text-muted">@_message</small>
+    }
+</div>
+
+@code  {
+    ChatClient _client = null;
+    string _message = null;
+    string _newMessage = null;
+    readonly List<Message> _messages = new List<Message>();
+    private ClaimsPrincipal _user = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetClaimsPrincipalData();
+        if (_user.Identity.IsAuthenticated)
+        {
+            await Chat();
+        }
+    }
+
+    private async Task GetClaimsPrincipalData()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        _user = authState.User;
+    }
+
+
+
+    async Task Chat()
+    {
+        try
+        {
+            _messages.Clear();
+            string baseUrl = Navigation.BaseUri;
+            _client = new ChatClient(_user.Identity.Name, baseUrl);
+            _client.MessageReceived += MessageReceived;
+            Console.WriteLine("Index: chart starting...");
+            await _client.StartAsync();
+            Console.WriteLine("Index: chart started?");
+        }
+        catch (Exception e)
+        {
+            _message = $"ERROR: Failed to start chat client: {e.Message}";
+            Console.WriteLine(e.Message);
+            Console.WriteLine(e.StackTrace);
+        }
+    }
+
+    void MessageReceived(object sender, MessageReceivedEventArgs e)
+    {
+        Console.WriteLine($"Blazor: receive {e.Username}: {e.Message}");
+        bool isMine = false;
+        if (!string.IsNullOrWhiteSpace(e.Username))
+        {
+            isMine = string.Equals(e.Username, _user.Identity.Name, StringComparison.CurrentCultureIgnoreCase);
+        }
+
+        var newMsg = new Message(e.Username, e.Message, isMine);
+        _messages.Add(newMsg);
+
+        // Inform blazor the UI needs updating
+        StateHasChanged();
+    }
+
+    async Task DisconnectAsync()
+    {
+        if (_user.Identity.IsAuthenticated)
+        {
+            await _client.StopAsync();
+            _client = null;
+            _message = "chat ended";
+            await SignOutManager.SetSignOutState();
+            Navigation.NavigateTo("authentication/logout");
+        }
+    }
+
+    async Task SendAsync()
+    {
+        if (_user.Identity.IsAuthenticated && !string.IsNullOrWhiteSpace(_newMessage))
+        {
+            await _client.SendAsync(_newMessage);
+            _newMessage = "";
+        }
+    }
+
+}

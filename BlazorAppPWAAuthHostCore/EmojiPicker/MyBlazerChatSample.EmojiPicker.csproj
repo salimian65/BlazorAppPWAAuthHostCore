@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+
+		<PackageId>WSDT.Blazor.EmojiFileInput</PackageId>
+		<Title>Emoji- and Filepicker for Blazor</Title>
+		<Description>Provides a simple Bootstrap Text-Input field with Smiley- and File-Support.</Description>
+		<Version>1.1.0</Version>
+		<Authors>Kevin Riedl: github.com/wsdt</Authors>
+		<Company>Self-Employed</Company>
+		<RepositoryUrl>https://github.com/wsdt/Blazor_EmojiFilePicker</RepositoryUrl>
+		<PackageTags>Blazor;Emoji;Smiley;Input;Text;File;Image;Picker;Bootstrap</PackageTags>
+		
+		<Copyright>WSDT - Riedl Kevin</Copyright>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		
+		<NeutralLanguage>en-AT</NeutralLanguage>
+		
+		<PackageReleaseNotes>Added clear/reset button.</PackageReleaseNotes>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <DocumentationFile>C:\Users\WSDT\Desktop\C#_.NET\KevinRiedl\RealtimeChat_WebAssembly\EmojiPicker\EmojiPicker.xml</DocumentationFile>
+	  <DefineConstants>TRACE</DefineConstants>
+	  <Optimize>false</Optimize>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="bootstrap" Version="4.4.1" />
+		<PackageReference Include="Markdig" Version="0.20.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.3" />
+		<PackageReference Include="Tewr.Blazor.FileReader" Version="1.5.0.20109" />
+	</ItemGroup>
+
+
+</Project>
