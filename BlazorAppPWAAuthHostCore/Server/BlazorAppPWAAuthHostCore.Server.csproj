@@ -3,14 +3,19 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>BlazorAppPWAAuthHostCore.Server-368FA031-9B67-4383-ADF4-7676E58858F4</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
+    <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Client\BlazorAppPWAAuthHostCore.Client.csproj" />
+    <ProjectReference Include="..\EmojiPicker\MyBlazerChatSample.EmojiPicker.csproj" />
     <ProjectReference Include="..\Shared\BlazorAppPWAAuthHostCore.Shared.csproj" />
   </ItemGroup>
 

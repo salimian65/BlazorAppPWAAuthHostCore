@@ -13,6 +13,8 @@ using Microsoft.Extensions.Hosting;
 using System.Linq;
 using BlazorAppPWAAuthHostCore.Server.Data;
 using BlazorAppPWAAuthHostCore.Server.Models;
+using EmojiPicker;
+using WSDT.EmojiFilePicker;
 
 namespace BlazorAppPWAAuthHostCore.Server
 {
@@ -45,6 +47,8 @@ namespace BlazorAppPWAAuthHostCore.Server
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddSignalR();
+
+            services.AddEmojiPicker();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

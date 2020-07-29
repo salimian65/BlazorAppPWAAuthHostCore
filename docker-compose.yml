@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  blazorapppwaauthhostcore.server:
+    image: ${DOCKER_REGISTRY-}blazorapppwaauthhostcoreserver
+    build:
+      context: .
+      dockerfile: BlazorAppPWAAuthHostCore/Server/Dockerfile
